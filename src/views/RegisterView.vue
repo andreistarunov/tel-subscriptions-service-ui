@@ -1,13 +1,13 @@
 <template>
   <div class="container">
-    <h1>SubscriptionsList Management System</h1>
-
-    <SubscriptionsList />
+    <h1>Auth</h1>
+    
+    <RegisterForm />
   </div>
 </template>
 
 <script setup lang="ts">
-import SubscriptionsList from '@/components/SubscriptionsList.vue';
+import RegisterForm from '@/components/RegisterForm.vue';
 </script>
 
 <style>
