@@ -1,9 +1,5 @@
 <template>
-  <div class="container">
-    <h1>SubscriptionsList Management System</h1>
 
-    <SubscriptionsList />
-  </div>
 </template>
 
 <script setup lang="ts">
