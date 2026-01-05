@@ -1,85 +1,64 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <v-layout class="rounded rounded-md border">
+    <v-app-bar :elevation="2" color="teal-darken-4">
+      <v-app-bar-title>Application Bar</v-app-bar-title>
+      <template v-slot:append v-if="$route.path !== '/login' && $route.path !== '/register'">
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+        <v-btn class="ma-10" @click="to_services_page">Услуги</v-btn>
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
+        <v-btn class="ma-10">Боты</v-btn>
 
-  <RouterView />
+        <v-btn class="ma-10">Покупатели</v-btn>
+
+        <v-btn class="ma-10" v-if="isLoggedIn" @click="to_login_page">Выход</v-btn>
+        <v-btn class="ma-10" v-else="isLoggedIn" @click="to_login_page">Вход</v-btn>
+      </template>
+    </v-app-bar>
+    <v-main>
+      <v-container fluid class="fill-height">
+        <v-row justify="center" class="fill-height">
+          <router-view></router-view>
+        </v-row>
+      </v-container>
+    </v-main>
+    <v-footer color="teal-darken-4" class="mt-auto" app>
+      <v-row justify="center" no-gutters>
+        <v-btn v-for="link in links" :key="link" color="white" variant="text" class="mx-2" rounded="xl">
+          {{ link }}
+        </v-btn>
+        <v-col class="text-center mt-4" cols="12">
+          {{ new Date().getFullYear() }} — <strong>My Application</strong>
+        </v-col>
+      </v-row>
+    </v-footer>
+  </v-layout>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
+
+const links = [
+  'Home',
+  'About Us',
+  'Team',
+  'Services',
+  'Blog',
+  'Contact Us',
+]
+
+const router = useRouter()
+
+const isLoggedIn = computed(() => {
+  return !!localStorage.getItem('ACCESS_TOKEN')
+})
+
+const to_login_page = () => {
+  localStorage.removeItem('ACCESS_TOKEN')
+  router.push('/login')
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+const to_services_page = () => {
+  router.push('/services')
 }
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
-</style>
+</script>
