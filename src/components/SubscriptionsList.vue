@@ -1,14 +1,14 @@
 <template>
-  <div>
-    <div v-if="loading" class="loading">Loading...</div>
-    <div v-else-if="error" class="error">{{ error }}</div>
-    <div v-else>
-      <h2>Subs List</h2>
-      <ul>
-        <li v-for="sub in subscriptions" :key="sub.title">
-          {{ sub.title }}
-        </li>
-      </ul>
+  <div v-if="loading" class="loading">Загрузка...</div>
+  <div v-else-if="error" class="error">{{ error }}</div>
+  <div v-else>
+    <div v-for="sub in subscriptions" :key="sub.id">
+
+      <v-card :title="sub.title" :subtitle="sub.description" :text="sub.price" min-width="400px" class="mb-10">
+        <v-card-actions>
+          <v-btn>Click me</v-btn>
+        </v-card-actions>
+      </v-card>
     </div>
   </div>
 </template>
@@ -20,7 +20,9 @@ import { storeToRefs } from 'pinia';
 const subsStore = useSubscriptionStore();
 const { subscriptions, loading, error } = storeToRefs(subsStore);
 
-subsStore.fetchSubscriptions('11e17f85-33f4-4802-849f-2c32fd9d4af2');
+subsStore.fetchSubscriptions();
+
+console.log('subscriptions = ', subscriptions.value);
 </script>
 
 <style scoped>
