@@ -7,13 +7,14 @@ export const useSubscriptionStore = defineStore('subscriptions', () => {
     const subscriptions = ref<Subscription[]>([]);
     const loading = ref(false);
     const error = ref<string | null>(null);
+    const token = ref<string | null>(localStorage.getItem('ACCESS_TOKEN') || null);
 
-    const fetchSubscriptions = async (userId: string) => {
+    const fetchSubscriptions = async () => {
         loading.value = true;
         error.value = null;
 
         try {
-            subscriptions.value = await ApiService.getSubscriptionsByUser(userId);
+            subscriptions.value = await ApiService.getSubscriptionsByUser(token.value);
         } catch (err) {
             error.value = err instanceof Error ? err.message : 'An error occured';
         } finally {
@@ -27,7 +28,7 @@ export const useSubscriptionStore = defineStore('subscriptions', () => {
         error.value = null;
 
         try {
-            const newSubscription = await ApiService.createSubscription(subsData);
+            const newSubscription = await ApiService.createSubscription(subsData, token.value);
             subscriptions.value.push(newSubscription);
 
             return newSubscription;

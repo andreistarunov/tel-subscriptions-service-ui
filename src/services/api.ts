@@ -3,11 +3,12 @@ import type { User, CreateUserRequest, Subscription, AuthUserResponse, CreateSub
 const API_BASE_URL = 'http://127.0.0.1:8000';
 
 export class ApiService {
-    static async getSubscriptionsByUser(userId: string): Promise<Subscription[]> {
-        const response = await fetch(`${API_BASE_URL}/subscriptions/${userId}`, {
+    static async getSubscriptionsByUser(token: string | null = null): Promise<Subscription[]> {
+        const response = await fetch(`${API_BASE_URL}/subscriptions`, {
             'method': 'GET',
             'headers': {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             }
         });
 
@@ -18,11 +19,13 @@ export class ApiService {
         return response.json();
     }
 
-    static async createSubscription(subcriptionData: CreateSubscriptionRequest) {
+    static async createSubscription(subcriptionData: CreateSubscriptionRequest, token: string | null = null) {
         const response = await fetch(`${API_BASE_URL}/subscriptions/`, {
             'method': 'POST',
             'headers': {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+
             },
             'body': JSON.stringify(subcriptionData)
         })
